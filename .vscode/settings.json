@@ -1,0 +1,46 @@
+{
+    "python.terminal.activateEnvironment": false,
+    "python.pythonPath": "D:\\ProgramPackage\\Anaconda\\envs\\eyestracking\\python.exe",
+    "launch": {
+    
+    },
+    "editor.tokenColorCustomizations": {
+        "textMateRules": [
+            {
+                "scope": "meta.function-call.generic.python",
+                "settings": {
+                    "foreground": "#f6ff75"
+                }
+            },
+            {
+                "scope": "constant.other.caps.python",
+                "settings": {
+                    "foreground": "#7e75ff"
+                }
+            },
+            {
+                "scope": "string.quoted.docstring.multi.python",
+                "settings": {
+                    "foreground": "#428f1f",
+                }
+            }
+            
+        ]
+    },
+    "todohighlight.keywords": [
+        {
+            "text": "≡",
+            "color": "#ff03b8",
+            "backgroundColor": "transparent",
+            "overviewRulerColor": "#ff03b8"
+        }
+    ],
+    "todohighlight.isEnable": true,
+    "python.testing.pytestArgs": [
+        "."
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.nosetestsEnabled": false,
+    "python.testing.pytestEnabled": true,
+    
+}
