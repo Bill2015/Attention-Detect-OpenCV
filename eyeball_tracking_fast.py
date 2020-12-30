@@ -7,8 +7,8 @@ import matplotlib.pyplot as plt
 import matplotlib.image as mpimg 
 
 # init part
-FACE_CASCADE = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
-EYES_CASCADE = cv2.CascadeClassifier('haarcascade_eye_tree_eyeglasses.xml')
+FACE_CASCADE = cv2.CascadeClassifier('model/haarcascade_frontalface_default.xml')
+EYES_CASCADE = cv2.CascadeClassifier('model/haarcascade_eye_tree_eyeglasses.xml')
 detector_params = cv2.SimpleBlobDetector_Params()
 detector_params.filterByArea = True
 detector_params.maxArea = 1500

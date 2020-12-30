@@ -91,9 +91,12 @@ FACE_3D_MODEL_POINT = np.array([
 
 # 攝像頭
 WEBCAM = cv2.VideoCapture(0)
+WEBCAM.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc('M', 'J', 'P', 'G'))
+WEBCAM.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+WEBCAM.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
 ret, img = WEBCAM.read()
 size = img.shape
-font = cv2.FONT_HERSHEY_SIMPLEX 
+
 
 
 # 取得鏡頭焦距
@@ -104,8 +107,20 @@ CAMERA_MATRIX = np.array(
                                 [focal_length, 0, center[0]],
                                 [0, focal_length, center[1]],
                                 [0, 0, 1]
-                            ], dtype='double'
+                            ], dtype='float'
                         )
+
+def rect_to_bb(rect):
+    # take a bounding predicted by dlib and convert it
+    # to the format (x, y, w, h) as we would normally do
+    # with OpenCV
+    x = rect.left()
+    y = rect.top()
+    w = rect.right() - x
+    h = rect.bottom() - y
+
+    # return a tuple of (x, y, w, h)
+    return (x, y, w, h)
 
 def detect():
     vertical_angle = 0
@@ -116,9 +131,14 @@ def detect():
     if ret == True:
         # img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) # 轉成灰階圖
         # 開始判斷人臉
-        faces = FACE_DETECTOR(img) # 取得人臉s
+        faces = FACE_DETECTOR(img, 0) # 取得人臉
+        
 
         for face in faces:       # 取得多張人臉
+
+            (x, y, w, h) = rect_to_bb(face)
+            cv2.rectangle(img,(x, y),(x + w, y + h),(255,0,0),2)
+
             marks = FACE_PREDICTOR(img, face)    # 使用 dlib 模型，將臉部位置標記出
             marks = shape_to_np(marks)
 
@@ -134,7 +154,7 @@ def detect():
                                     marks[54]      # 取得右嘴角
                                 ], 
                                 dtype='double')
-            dist_coeffs = np.zeros((4,1), dtype='double') # Assuming no lens distortion
+            dist_coeffs = np.zeros((4,1)) # Assuming no lens distortion
 
             # 取得在 3D 投影至 2D 畫面時的座標運算，用來計算 3D 位置標定的移動情況
             (success, rotation_vector, translation_vector) = cv2.solvePnP(FACE_3D_MODEL_POINT, image_points, CAMERA_MATRIX, dist_coeffs)
@@ -158,7 +178,7 @@ def detect():
             # 取得鼻尖座標 (臉部 3D 投影後的座標)
             p2 = ( int(nose_end_point2D[0][0][0]), int(nose_end_point2D[0][0][1]))
 
-            cv2.line(img, p1, p2, (0, 255, 255), 2)
+            cv2.line(img, p1, p2, (0, 255, 0), 2)
             try:
                 m = (p2[1] - p1[1])/(p2[0] - p1[0])
                 vertical_angle = int(math.degrees(math.atan(m)))
@@ -206,6 +226,7 @@ def detect():
     return (horizon_angle, vertical_angle, img)
 
 # 頭部方向
+NONE    = 0
 LEFT    = 1
 RIGHT   = 2
 UP      = 3

@@ -44,7 +44,7 @@ class MainUi(QtWidgets.QMainWindow, Ui_MainWindow):
         self.label_verticleThreshold= self.findChild(QLabel, name='labelText_Angle_Threshold_Verticle') # 顯示垂直閥值的 Label
         self.scrollBar_horizon      = self.findChild(QSlider, name='sliderBar_Threshold_Horizon')    # 水平閥值
         self.scrollBar_verticle     = self.findChild(QSlider, name='sliderBar_Threshold_Verticle')   # 垂直閥值
-
+        self.label_distractRate     = self.findChild(QLabel, name='labelShow_Distract_Rate')        # 分心度
 
         self.initVideoEvent()
         
@@ -52,6 +52,8 @@ class MainUi(QtWidgets.QMainWindow, Ui_MainWindow):
         self.update_flag = True     # 是否要繼續更新旗標
         self.fps_rate = 0           # FPS
         self.pre_time = TIME.time() # 取得目前時間
+        self.pre_direction      = 0 # 上一個頭的動作
+        self.oscillate_count    = 0 # 震盪計算
 
         # 多執行續，用來更新圖片
         thread = THREAD.Thread(target = self.update_Image, args=( ))
@@ -102,9 +104,20 @@ class MainUi(QtWidgets.QMainWindow, Ui_MainWindow):
             # 取得目前頭部的轉向
             (head_rotation, head_rotation_str) = HEAD.judge_look(horizon_angle       =horizon_angle  , vertical_angle    =vertical_angle, 
                                                                  horizon_threshold   =hThreshold     , vertical_threshold=vThreshold)
-            rotation_str = '目前頭部方向： ' + str(head_rotation_str)
-            self.label_headDirection.setText( rotation_str )
 
+            
+            # ------------------------------------------------------------
+            if head_rotation != self.pre_direction :
+                self.oscillate_count += 1
+                if( self.oscillate_count >= 2 ):
+                    self.pre_direction = head_rotation
+                    rotation_str = '目前頭部方向： ' + str(head_rotation_str)
+                    self.label_headDirection.setText( rotation_str )
+            else:
+                self.oscillate_count = 0
+            
+            
+            # ------------------------------------------------------------
             # 計算 FPS
             self._caculate_fps()
 

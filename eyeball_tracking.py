@@ -176,8 +176,8 @@ while(True):
         eyeball_pos_right   = contouring(thresh[:, mid:] , mid, end_point_right, img, True)
         print_eye_pos(img, eyeball_pos_left, eyeball_pos_right)
 
-        # for (x, y) in shape[36:48]:
-          # cv2.circle(img, (x, y), 2, (255, 0, 0), -1)
+        #for (x, y) in shape[36:48]:
+        #   cv2.circle(img, (x, y), 2, (255, 0, 0), -1)
     # show the image with the face detections + facial landmarks
 
     # 顯示偵測出的圖片 與 閥值設定遮照圖
