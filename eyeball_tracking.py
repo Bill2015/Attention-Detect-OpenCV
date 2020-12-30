@@ -105,7 +105,7 @@ def print_eye_pos(img, left, right):
 # 建立人臉偵測
 detector = dlib.get_frontal_face_detector()
 # 建立人臉細節偵測
-predictor = dlib.shape_predictor('shape_predictor_68_face_landmarks.dat')
+predictor = dlib.shape_predictor('model/shape_predictor_68_face_landmarks.dat')
 
 # 眼球的特徵點位置：參照 https://miro.medium.com/max/875/0*SgfJ7xl7QKZm037P.jpg
 LEFT_EYE_EIGEN_POINT    = [36, 37, 38, 39, 40, 41]
@@ -143,7 +143,7 @@ while(True):
     # 轉成灰階圖
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     # 取得人臉位置
-    rects = detector(gray, 1)
+    rects = detector(gray)
 
     # 假如有多個人臉就迴圈判斷
     for rect in rects:

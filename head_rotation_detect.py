@@ -3,7 +3,6 @@ import numpy as np
 import dlib as dlib
 import math
 
-
 # 將特徵點的座標轉成陣列
 def shape_to_np(shape, dtype = "int"):
 	# initialize the list of (x, y)-coordinates
@@ -109,12 +108,15 @@ CAMERA_MATRIX = np.array(
                         )
 
 def detect():
+    vertical_angle = 0
+    horizon_angle  = 0
     # 讀取攝像頭圖片
     ret, img = WEBCAM.read()
 
     if ret == True:
+        # img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) # 轉成灰階圖
         # 開始判斷人臉
-        faces = FACE_DETECTOR(img, 1) # 取得人臉s
+        faces = FACE_DETECTOR(img) # 取得人臉s
 
         for face in faces:       # 取得多張人臉
             marks = FACE_PREDICTOR(img, face)    # 使用 dlib 模型，將臉部位置標記出
@@ -134,7 +136,6 @@ def detect():
                                 dtype='double')
             dist_coeffs = np.zeros((4,1), dtype='double') # Assuming no lens distortion
 
-            print('================================')
             # 取得在 3D 投影至 2D 畫面時的座標運算，用來計算 3D 位置標定的移動情況
             (success, rotation_vector, translation_vector) = cv2.solvePnP(FACE_3D_MODEL_POINT, image_points, CAMERA_MATRIX, dist_coeffs)
             
@@ -151,6 +152,7 @@ def detect():
             
             
             # --------------------------------------------------------------------------------------
+            # 取得垂直角度
             # 取得鼻尖座標 (臉部直接投影位置)
             p1 = ( int(image_points[0][0]), int(image_points[0][1]))
             # 取得鼻尖座標 (臉部 3D 投影後的座標)
@@ -163,29 +165,30 @@ def detect():
             except:
                 vertical_angle = 0
 
-            if vertical_angle >= 48:
-                print('Head down')
-                cv2.putText(img, 'Head down', (30, 30), font, 2, (255, 255, 128), 3)
-            elif vertical_angle <= -48:
-                print('Head up')
-                cv2.putText(img, 'Head up', (30, 30), font, 2, (255, 255, 128), 3)
+            # if vertical_angle >= 48:
+            #     print('Head down')
+            #     cv2.putText(img, 'Head down', (30, 30), font, 2, (255, 255, 128), 3)
+            # elif vertical_angle <= -48:
+            #     print('Head up')
+            #     cv2.putText(img, 'Head up', (30, 30), font, 2, (255, 255, 128), 3)
 
-            cv2.putText(img, str(vertical_angle), tuple(p1), font, 2, (128, 255, 255), 3)
+            # cv2.putText(img, str(vertical_angle), tuple(p1), font, 2, (128, 255, 255), 3)
             # --------------------------------------------------------------------------------------
-            # x1, x2 = head_pose_points(img, rotation_vector, translation_vector, camera_matrix)
+            # 取得水平角度
+            x1, x2 = head_pose_points(img, rotation_vector, translation_vector, CAMERA_MATRIX)
 
-            # cv2.line(img, tuple(x1), tuple(x2), (255, 255, 0), 2)
-            # # for (x, y) in marks:
-            # #     cv2.circle(img, (x, y), 4, (255, 255, 0), -1)
-            # # cv2.putText(img, str(p1), p1, font, 1, (0, 255, 255), 1)
+            cv2.line(img, tuple(x1), tuple(x2), (255, 255, 0), 2)
+            # for (x, y) in marks:
+            #     cv2.circle(img, (x, y), 4, (255, 255, 0), -1)
+            # cv2.putText(img, str(p1), p1, font, 1, (0, 255, 255), 1)
                 
-            # try:
-            #     m = (x2[1] - x1[1])/(x2[0] - x1[0])
-            #     horizon_angle = int(math.degrees(math.atan(-1/m)))
-            # except:
-            #     horizon_angle = 90
+            try:
+                m = (x2[1] - x1[1])/(x2[0] - x1[0])
+                horizon_angle = int(math.degrees(math.atan(-1/m)))
+            except:
+                horizon_angle = 90
                 
-            #     # print('div by zero error')
+                # print('div by zero error')
              
             # if horizon_angle >= 48:
             #     print('Head right')
@@ -197,14 +200,47 @@ def detect():
             # cv2.putText(img, str(horizon_angle), tuple(x1), font, 2, (255, 255, 128), 3)
 
         # 顯示影像
-        cv2.imshow('img', img)
- 
-def quit():
-    WEBCAM.release()
-    cv2.destroyAllWindows()
+        # cv2.imshow('img', img)
 
-while True:
-    detect()
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        quit()
-        break
+    # 回傳角度以及圖片
+    return (horizon_angle, vertical_angle, img)
+
+# 頭部方向
+LEFT    = 1
+RIGHT   = 2
+UP      = 3
+DOWN    = 4
+
+# 判斷頭部目前的轉向
+def judge_look(horizon_angle, vertical_angle, horizon_threshold, vertical_threshold):
+    head_direction      = 0
+    head_direction_str  = ['      ','      '] 
+
+    # print('div by zero error')
+    if abs(vertical_angle) <= 90 - vertical_threshold :
+        print('Head down')
+        head_direction = UP
+        head_direction_str[1] = ' 向下 '
+
+    elif abs(vertical_angle) >= vertical_threshold:
+        print('Head up')
+        head_direction = DOWN
+        head_direction_str[1] = ' 向上 '
+
+    if horizon_angle >= horizon_threshold:
+        print('Head right')
+        head_direction = RIGHT
+        head_direction_str[0] = ' 向右 '
+
+    elif horizon_angle <= -horizon_threshold:
+        print('Head left')
+        head_direction = LEFT
+        head_direction_str[0] = ' 向左 '
+
+
+
+    return (head_direction, head_direction_str)
+
+def destroy():
+    WEBCAM.release()
+    
