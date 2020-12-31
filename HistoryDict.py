@@ -8,6 +8,7 @@ class History():
         for i in range(0, dict_size):
             self.historyDict[ str(i) ] = []
 
+
     # add a history
     def add(self, values):
         for (key, value) in zip( self.historyDict, values ):
