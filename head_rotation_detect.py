@@ -224,7 +224,7 @@ def get_angles_gerneal(image_points, rvec, tvec):
 Pnp_History = History( 2 )
 Dib_History = History( 6 )
 
-def detect():
+def detect(show3D = True, showFaceMark = True):
 
     vertical_angle = 0
     horizon_angle  = 0
@@ -279,15 +279,16 @@ def detect():
                 [rotation_vector, translation_vector] = Pnp_History.get_average()
                 Pnp_History.pop()
 
-
-            draw_annotation_box(img, rotation_vector, translation_vector, CAMERA_MATRIX)
+            if( show3D ):
+                draw_annotation_box(img, rotation_vector, translation_vector, CAMERA_MATRIX)
             # Project a 3D point (0, 0, 1000.0) onto the image plane.
             # We use this to draw a line sticking out of the nose
             
 
             # 將臉部的點標記出至圖片上
-            for p in image_points:
-                cv2.circle(img, (int(p[0]), int(p[1])), 3, (0,0,255), -1)
+            if( showFaceMark ):
+                for p in image_points:
+                    cv2.circle(img, (int(p[0]), int(p[1])), 3, (0,0,255), -1)
             
             (horizon_angle, vertical_angle) = get_angles_gerneal(image_points, rotation_vector, translation_vector) 
 

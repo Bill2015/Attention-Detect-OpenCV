@@ -68,6 +68,9 @@ class MainUi(QtWidgets.QMainWindow, Ui_MainWindow):
         self.scrollBar_vertical     = self.findChild(QSlider, name='sliderBar_Threshold_Vertical')   # 垂直閥值
         self.label_focusRate        = self.findChild(QLabel, name='labelShow_Focus_Rate')        # 專注度
 
+        self.button_reset           = self.findChild(QPushButton, name='pushButton_Reset')
+        self.checkBox_show3D        = self.findChild(QCheckBox, name='checkBox_Show_3D')
+        self.checkBox_showFaceMark  = self.findChild(QCheckBox, name='checkBox_Show_Facemark')
         # 初始化影片顯示區域
         self.initVideoEvent()
         
@@ -81,10 +84,11 @@ class MainUi(QtWidgets.QMainWindow, Ui_MainWindow):
         self.focus_timer        = 0
 
 
-        # 多執行續，用來更新圖片
-        #thread = THREAD.Thread(target = self.update, args=( ))
-        #thread.setDaemon(True)
-        #thread.start()
+        def reset():
+            self.focus_count        = 0
+            self.focus_timer        = 0
+        self.button_reset.clicked.connect( reset )
+
 
         # 建立新執行緒，將自定義訊號sinOut連線到slotAdd()槽函式
         self.thread = Worker()
@@ -106,8 +110,11 @@ class MainUi(QtWidgets.QMainWindow, Ui_MainWindow):
         # 開始偵測
         # QtWidgets.QApplication.instance().processEvents()
         # ------------------------------------------------------------
+
+        show3D      = self.checkBox_show3D.isChecked()
+        showMark    = self.checkBox_showFaceMark.isChecked()
         # 偵測頭部旋轉，並取得數值
-        (horizon_angle, vertical_angle, cvimg) = HEAD.detect()
+        (horizon_angle, vertical_angle, cvimg) = HEAD.detect( show3D, showMark )
 
         try:
             # 更新影像
