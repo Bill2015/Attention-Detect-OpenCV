@@ -1,2 +1,2 @@
-# Eyes-Tracking
- Use python tracking eyeball to detect the man who is distracting
+# PyQt-Bahamut-Image-Downloader
+ A PyQt Application, to download bahamut gamer's community image
