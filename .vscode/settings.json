@@ -1,13 +1,9 @@
 {
     "python.terminal.activateEnvironment": false,
-    "python.pythonPath": "D:\\ProgramPackage\\Anaconda\\envs\\application\\python.exe",
+    "python.pythonPath": "D:\\ProgramPackage\\Anaconda\\envs\\eyestracking\\python.exe",
     "launch": {
     
     },
-    "python.autoComplete.extraPaths": [
-        "D:/ProgramPackage/Anaconda/envs/application/**",
-        "D:/ProgramPackage/Anaconda/envs/application/include/**"],
-    "python.autoComplete.addBrackets": false,    
     "editor.tokenColorCustomizations": {
         "textMateRules": [
             {
