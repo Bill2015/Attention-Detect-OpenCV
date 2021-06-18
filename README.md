@@ -11,10 +11,11 @@
 ![image](https://github.com/Bill2015/Attention-Detect-OpenCV/blob/main/data/eival.png)
 
 ## Change (改變)
-> I using PyQt5 design a GUI to show the detect result.  
->> 我用 PyQt5 設計了一個 GUI 來顯示偵測結果
-> Let head rotation detect more smooth
->> 讓頭部旋轉判斷變得更平滑
+> I using PyQt5 design a GUI to show the detect result.    
+>> 我用 PyQt5 設計了一個 GUI 來顯示偵測結果  
+
+> Let head rotation detect more smooth  
+>> 讓頭部旋轉判斷變得更平滑  
 
 ## Demonstrate (展示)
 ![image](https://github.com/Bill2015/Attention-Detect-OpenCV/blob/main/data/img1.gif)
@@ -23,8 +24,8 @@
 ![image](https://github.com/Bill2015/Attention-Detect-OpenCV/blob/main/data/img4.gif)
 
 
-# Referances
-[Real-Time Head Pose Estimation in Python](https://towardsdatascience.com/real-time-head-pose-estimation-in-python-e52db1bc606a)
-[Head Pose Estimation using OpenCV and Dlib](https://learnopencv.com/head-pose-estimation-using-opencv-and-dlib/)
-[Analysis and Improvement of Facial Landmark Detection](https://www.researchgate.net/publication/332866914_Analysis_and_Improvement_of_Facial_Landmark_Detection)
+# Referances (參考資料)
+[Real-Time Head Pose Estimation in Python](https://towardsdatascience.com/real-time-head-pose-estimation-in-python-e52db1bc606a)  
+[Head Pose Estimation using OpenCV and Dlib](https://learnopencv.com/head-pose-estimation-using-opencv-and-dlib/)  
+[Analysis and Improvement of Facial Landmark Detection](https://www.researchgate.net/publication/332866914_Analysis_and_Improvement_of_Facial_Landmark_Detection)  
 
