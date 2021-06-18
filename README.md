@@ -23,5 +23,8 @@
 ![image](https://github.com/Bill2015/Attention-Detect-OpenCV/blob/main/data/img4.gif)
 
 
-# Referance
+# Referances
 [Real-Time Head Pose Estimation in Python](https://towardsdatascience.com/real-time-head-pose-estimation-in-python-e52db1bc606a)
+[Head Pose Estimation using OpenCV and Dlib](https://learnopencv.com/head-pose-estimation-using-opencv-and-dlib/)
+[Analysis and Improvement of Facial Landmark Detection](https://www.researchgate.net/publication/332866914_Analysis_and_Improvement_of_Facial_Landmark_Detection)
+
